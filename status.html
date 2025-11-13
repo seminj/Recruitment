@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>강의실 예약 현황</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/exceljs@4.3.0/dist/exceljs.min.js"></script>
+    <script src="api.js"></script>
+    <script defer src="status.js"></script>
+  </head>
+  <body>
+    <main class="page">
+      <header class="page-header">
+        <h1 class="page-title">강의실 예약 현황</h1>
+        <div class="control-group">
+          <a class="btn btn-secondary" href="admin.html">관리자 페이지</a>
+        </div>
+      </header>
+
+      <section class="card" style="margin-bottom: 0px;">
+        <div class="card-section status-toolbar">
+          <div class="status-toolbar__primary">
+            <div class="status-field">
+              <span class="status-field__label">조회 기간</span>
+              <div class="date-range-inputs">
+                <input type="date" id="rangeStart" />
+                <span class="date-separator">~</span>
+                <input type="date" id="rangeEnd" />
+              </div>
+            </div>
+            <div class="quick-date-buttons">
+              <button type="button" class="btn-quick-date" data-days="7">1주일</button>
+              <button type="button" class="btn-quick-date" data-days="30">1개월</button>
+              <button type="button" class="btn-quick-date" data-days="90">3개월</button>
+              <button type="button" class="btn-quick-date" data-days="180">6개월</button>
+            </div>
+            <div class="status-actions">
+              <button class="btn" id="rangeApplyBtn">
+                <span>적용</span>
+              </button>
+              <button class="btn btn-secondary" id="scrollTodayBtn">
+                <span>오늘로 이동</span>
+              </button>
+              <button class="btn btn-secondary" id="exportExcelBtn">
+                <span>엑셀 다운로드</span>
+              </button>
+            </div>
+          </div>
+          <div class="status-toolbar__secondary">
+            <div class="status-toolbar__filter-group" style="display: flex; align-items: center; gap: 12px;">
+              <span class="status-toolbar__label" style="margin: 0;">강의실 분류</span>
+              <div
+                class="category-toggle"
+                id="categoryToggle"
+                role="group"
+                aria-label="강의실 분류 선택"
+              >
+                <button
+                  type="button"
+                  class="active"
+                  data-category="all"
+                  aria-pressed="true"
+                >
+                  전체
+                </button>
+                <button type="button" data-category="cat1" aria-pressed="false">
+                  1층
+                </button>
+                <button type="button" data-category="cat2" aria-pressed="false">
+                  2층
+                </button>
+                <button type="button" data-category="cat3" aria-pressed="false">
+                  3층
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="alert alert-info">
+          <span class="alert-icon">ℹ️</span>
+          <span>예약/공휴일/강의실은 관리자 페이지에서 관리하세요.</span>
+        </div>
+      </section>
+
+      <section class="table-scroll-wrapper" aria-live="polite" style="margin-top: -8px;">
+        <table class="status-table" id="statusTable">
+          <thead></thead>
+          <tbody></tbody>
+        </table>
+      </section>
+    </main>
+
+    <div id="edit-modal" class="modal-backdrop" hidden role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h2 id="modal-title">예약 수정</h2>
+          <button type="button" class="modal-close" aria-label="닫기" id="modalCloseBtn">×</button>
+        </div>
+        <form id="editReservationForm" class="modal-body">
+          <label class="stack-sm">
+            <span class="text-muted">강의명</span>
+            <input type="text" id="editTitle" required />
+          </label>
+          <label class="stack-sm">
+            <span class="text-muted">강사</span>
+            <input type="text" id="editInstructor" />
+          </label>
+          <label class="stack-sm">
+            <span class="text-muted">좌석수</span>
+            <input type="number" id="editSeats" min="1" required />
+          </label>
+          <label class="stack-sm">
+            <span class="text-muted">인원수</span>
+            <input type="number" id="editHeadcount" min="1" required />
+          </label>
+          <div class="modal-actions">
+            <button type="button" class="btn btn-secondary" id="modalCancelBtn">취소</button>
+            <button type="submit" class="btn" id="modalSaveBtn">저장</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>
+
